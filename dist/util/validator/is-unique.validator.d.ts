@@ -1,0 +1,8 @@
+import { ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
+import { EntityManager } from 'typeorm';
+export declare class IsUniqueConstraint implements ValidatorConstraintInterface {
+    private readonly entityManager;
+    constructor(entityManager: EntityManager);
+    validate(value: any, args?: ValidationArguments): Promise<boolean>;
+    defaultMessage(validationArguments?: ValidationArguments): string;
+}
