@@ -28,33 +28,12 @@ let UserService = class UserService {
         this.repo = repo;
         this.jwtService = jwtService;
     }
-    async findAll() {
-        const users = await this.repo.find();
-        if (!users) {
-            throw new common_1.NotFoundException('There are no users records in the database');
-        }
-        const output = users.map((u) => {
-            return (0, class_transformer_1.plainToInstance)(report_user_dto_1.UserReportDto, u, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
-    }
     async find(email) {
         const user = await this.repo.find({ where: { email } });
         if (!user) {
             throw new common_1.NotFoundException(`User with email: ${email} was not found`);
         }
         return user;
-    }
-    async findOne(id) {
-        const user = await this.repo.findOneBy({ id });
-        if (!user) {
-            throw new common_1.NotFoundException(`User with id: ${id} not found`);
-        }
-        return (0, class_transformer_1.plainToInstance)(report_user_dto_1.UserReportDto, user, {
-            excludeExtraneousValues: true,
-        });
     }
     async registerUser(username, email, password) {
         const salt = (0, crypto_1.randomBytes)(8).toString('hex');
@@ -69,9 +48,6 @@ let UserService = class UserService {
     }
     async loginUser(user) {
         const [existingUser] = await this.find(user.email);
-        if (!existingUser) {
-            throw new common_1.NotFoundException(`User with email: ${user.email} was not found. Please provide correct email`);
-        }
         const [salt, storedHash] = existingUser.password.split('.');
         const hash = (await scrypt(user.password, salt, 32));
         if (storedHash !== hash.toString('hex')) {

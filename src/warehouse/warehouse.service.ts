@@ -4,8 +4,6 @@ import { UpdateWarehouseDto } from './dto/update-warehouse.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Warehouse } from './entities/warehouse.entity';
 import { Repository } from 'typeorm';
-import { WarehouseReportDto } from './dto/report-warehouse.dto';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class WarehouseService {
@@ -13,21 +11,15 @@ export class WarehouseService {
 
     async findAll() {
         const warehouses = await this.repo.find();
-
-        const output = warehouses.map((w) => {
-            return plainToInstance(WarehouseReportDto, w, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
+        return warehouses;
     }
 
     async findOne(id: string) {
         const warehouse = await this.repo.findOneBy({ id });
-        if (!warehouse) {
-            throw new NotFoundException(`Warehouse with id: ${id} was not found`);
-        }
+        // if (!warehouse) {
+        //     throw new NotFoundException(`Warehouse with id: ${id} was not found`);
+        // }
+
         return warehouse;
     }
 
@@ -38,6 +30,18 @@ export class WarehouseService {
 
     async update(id: string, updateWarehouseDto: UpdateWarehouseDto) {
         const warehouse = await this.findOne(id);
+
+        if (warehouse.type !== updateWarehouseDto.type) {
+            const warehouseExists = await this.repo
+                .createQueryBuilder('w')
+                .leftJoinAndSelect('operation', 'operation')
+                .select('w')
+                .where('operation.warehouse=:wId', { wId: warehouse.id })
+                .getOne();
+            if (warehouseExists) {
+                updateWarehouseDto.type = warehouse.type;
+            }
+        }
         Object.assign(warehouse, updateWarehouseDto);
         return await this.repo.save(warehouse);
     }

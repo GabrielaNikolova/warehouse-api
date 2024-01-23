@@ -125,7 +125,7 @@ export class OperationService {
     async update(id: string, updateOperationDto: UpdateOperationDto) {
         const operation = await this.findOne(id);
 
-        //const client = await this.clientService.findOne(updateOperationDto.client);
+        await this.clientService.findOne(updateOperationDto.client);
 
         Object.assign(operation, updateOperationDto);
         return await this.repo.save(operation);
@@ -160,10 +160,6 @@ export class OperationService {
     async getRequestedData(createOperationDto: CreateOperationDto) {
         const client = await this.clientService.findOne(createOperationDto.client);
 
-        if (!client) {
-            throw new NotFoundException(`Client with id: ${createOperationDto.client} was not found.`);
-        }
-
         if (createOperationDto.type === 'transfer' && createOperationDto.warehouseIn) {
             const warehouseIn = await this.warehouseService.findOne(createOperationDto.warehouseIn);
             if (!warehouseIn) {
@@ -176,10 +172,6 @@ export class OperationService {
         }
 
         const warehouse = await this.warehouseService.findOne(createOperationDto.warehouse);
-
-        if (!warehouse) {
-            throw new NotFoundException(`Warehouse with id: ${createOperationDto.warehouse} was not found.`);
-        }
 
         const existingProducts = await this.productService.findProductsByIds(
             createOperationDto.products,
@@ -196,7 +188,7 @@ export class OperationService {
     async getClientWithMostOrders() {
         const productOrders = await this.repo
             .createQueryBuilder('report')
-            .leftJoinAndSelect(Client, 'client', 'report.client=client.id')
+            .leftJoinAndSelect(Client, 'client', 'report.client = client.id')
             .select('client.id', 'id')
             .addSelect('CAST(COUNT(report.id)as INTEGER)', 'orders')
             .where('report.type = :operationType', { operationType: OperationType.STOCK_PICKING })

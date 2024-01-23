@@ -65,6 +65,9 @@ let OperationDetailsService = class OperationDetailsService {
         this.repo.remove(operationDetail);
         return operationDetail.id;
     }
+    async checkDetailsForProductId(id) {
+        return await this.repo.existsBy({ product: id });
+    }
     async checkAvailableQuantity(createOperatioDto, existingData) {
         const warehouse = await this.warehouseService.findOne(createOperatioDto.warehouse);
         for (const opDetail of existingData) {

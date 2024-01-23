@@ -17,24 +17,19 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const product_entity_1 = require("./entities/product.entity");
 const typeorm_2 = require("typeorm");
-const class_transformer_1 = require("class-transformer");
-const report_product_dto_1 = require("./dto/report-product.dto");
 const operation_detail_dto_1 = require("../operation-details/dto/operation-detail.dto");
+const operation_details_service_1 = require("../operation-details/operation-details.service");
 let ProductService = class ProductService {
-    constructor(repo) {
+    constructor(repo, operationDetailService) {
         this.repo = repo;
+        this.operationDetailService = operationDetailService;
     }
     async findAll() {
         const products = await this.repo.find();
         if (!products) {
             throw new common_1.NotFoundException(`There are no products records in the database`);
         }
-        const output = products.map((p) => {
-            return (0, class_transformer_1.plainToInstance)(report_product_dto_1.ProductReportDto, p, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
+        return products;
     }
     async findOne(id) {
         const product = await this.repo.findOneBy({ id });
@@ -49,6 +44,12 @@ let ProductService = class ProductService {
     }
     async update(id, updateProductDto) {
         const product = await this.findOne(id);
+        if (product.category !== updateProductDto.category) {
+            const productExists = await this.operationDetailService.checkDetailsForProductId(id);
+            if (productExists) {
+                updateProductDto.category = product.category;
+            }
+        }
         Object.assign(product, updateProductDto);
         return this.repo.save(product);
     }
@@ -81,6 +82,7 @@ exports.ProductService = ProductService;
 exports.ProductService = ProductService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(product_entity_1.Product)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        operation_details_service_1.OperationDetailsService])
 ], ProductService);
 //# sourceMappingURL=product.service.js.map

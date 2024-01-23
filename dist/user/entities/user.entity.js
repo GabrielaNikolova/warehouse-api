@@ -20,11 +20,11 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)('varchar', { length: 20, unique: true }),
+    (0, typeorm_1.Column)('varchar', { length: 20 }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([
-    (0, typeorm_1.Column)('varchar', { length: 30, unique: true }),
+    (0, typeorm_1.Column)('varchar', { length: 30 }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([

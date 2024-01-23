@@ -66,6 +66,10 @@ export class OperationDetailsService {
         return operationDetail.id;
     }
 
+    async checkDetailsForProductId(id: string) {
+        return await this.repo.existsBy({ product: id });
+    }
+
     async checkAvailableQuantity(createOperatioDto: CreateOperationDto, existingData: OperationDetailDto[]) {
         const warehouse = await this.warehouseService.findOne(createOperatioDto.warehouse);
         // const availableProducts: OperationDetailDto[] = [];

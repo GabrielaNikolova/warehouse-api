@@ -20,7 +20,7 @@ __decorate([
     __metadata("design:type", String)
 ], Warehouse.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)('varchar', { length: 200, unique: true }),
+    (0, typeorm_1.Column)('varchar', { length: 200 }),
     __metadata("design:type", String)
 ], Warehouse.prototype, "name", void 0);
 __decorate([

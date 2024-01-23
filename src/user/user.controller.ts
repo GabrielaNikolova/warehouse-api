@@ -24,19 +24,6 @@ export class UserController {
         return await this.userService.loginUser(user);
     }
 
-    // @Get()
-    // async findAll() {
-    //     return await this.userService.findAll();
-    // }
-
-    // @Get(':id')
-    // async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
-    //     const user = await this.userService.findOne(id);
-    //     return plainToInstance(UserReportDto, user, {
-    //         excludeExtraneousValues: true,
-    //     });
-    // }
-
     @UseGuards(RolesGuard)
     @HasRoles(UserRole.OWNER)
     @Patch(':id')

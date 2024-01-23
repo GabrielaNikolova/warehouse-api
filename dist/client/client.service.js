@@ -17,8 +17,6 @@ const common_1 = require("@nestjs/common");
 const client_entity_1 = require("./entities/client.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const report_client_dto_1 = require("./dto/report-client.dto");
-const class_transformer_1 = require("class-transformer");
 let ClientService = class ClientService {
     constructor(repo) {
         this.repo = repo;
@@ -28,12 +26,7 @@ let ClientService = class ClientService {
         if (!clients) {
             throw new common_1.NotFoundException('There are no clients records in the database');
         }
-        const output = clients.map((c) => {
-            return (0, class_transformer_1.plainToInstance)(report_client_dto_1.ClientReportDto, c, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
+        return clients;
     }
     async findOne(id) {
         const client = await this.repo.findOneBy({ id });

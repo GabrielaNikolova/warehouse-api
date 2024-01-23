@@ -19,21 +19,6 @@ export class UserService {
         private jwtService: JwtService,
     ) {}
 
-    async findAll() {
-        const users = await this.repo.find();
-        if (!users) {
-            throw new NotFoundException('There are no users records in the database');
-        }
-
-        const output = users.map((u) => {
-            return plainToInstance(UserReportDto, u, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
-    }
-
     async find(email: string) {
         const user = await this.repo.find({ where: { email } });
         if (!user) {
@@ -41,16 +26,6 @@ export class UserService {
         }
 
         return user;
-    }
-
-    async findOne(id: string) {
-        const user = await this.repo.findOneBy({ id });
-        if (!user) {
-            throw new NotFoundException(`User with id: ${id} not found`);
-        }
-        return plainToInstance(UserReportDto, user, {
-            excludeExtraneousValues: true,
-        });
     }
 
     async registerUser(username: string, email: string, password: string) {
@@ -71,9 +46,6 @@ export class UserService {
 
     async loginUser(user: LoginUserDto) {
         const [existingUser] = await this.find(user.email);
-        if (!existingUser) {
-            throw new NotFoundException(`User with email: ${user.email} was not found. Please provide correct email`);
-        }
 
         const [salt, storedHash] = existingUser.password.split('.');
 

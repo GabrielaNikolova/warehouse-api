@@ -5,7 +5,7 @@ export class Client {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('varchar', { length: 100, unique: true })
+    @Column('varchar', { length: 100 })
     name: string;
 
     @Column('varchar', { length: 350, nullable: true })

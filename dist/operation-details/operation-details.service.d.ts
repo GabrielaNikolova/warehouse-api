@@ -14,6 +14,7 @@ export declare class OperationDetailsService {
     update(id: string, updateOperationDetailDto: UpdateOperationDetailDto): Promise<OperationDetail>;
     delete(id: string): Promise<string>;
     permDelete(id: string): Promise<string>;
+    checkDetailsForProductId(id: string): Promise<boolean>;
     checkAvailableQuantity(createOperatioDto: CreateOperationDto, existingData: OperationDetailDto[]): Promise<void>;
     findDetailsByOperationId(opId: string): Promise<OperationDetail[]>;
     findBestsellingProducts(): Promise<any[]>;

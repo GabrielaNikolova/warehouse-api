@@ -6,7 +6,7 @@ export class Warehouse {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column('varchar', { length: 200, unique: true })
+    @Column('varchar', { length: 200 })
     name: string;
 
     @Column('enum', { enum: ProductWarehouseCategory })

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateInvoiceDto = void 0;
 const mapped_types_1 = require("@nestjs/mapped-types");
 const create_invoice_dto_1 = require("./create-invoice.dto");
-class UpdateInvoiceDto extends (0, mapped_types_1.PartialType)((0, mapped_types_1.OmitType)(create_invoice_dto_1.CreateInvoiceDto, ['operation'])) {
+class UpdateInvoiceDto extends (0, mapped_types_1.PartialType)((0, mapped_types_1.OmitType)(create_invoice_dto_1.CreateInvoiceDto, ['operation', 'number'])) {
 }
 exports.UpdateInvoiceDto = UpdateInvoiceDto;
 //# sourceMappingURL=update-invoice.dto.js.map

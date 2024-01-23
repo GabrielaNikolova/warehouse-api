@@ -4,14 +4,16 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
-import { plainToInstance } from 'class-transformer';
-import { ProductReportDto } from './dto/report-product.dto';
 import { CreateOperationDetailDto } from 'src/operation-details/dto/create-operation-detail.dto';
 import { OperationDetailDto } from 'src/operation-details/dto/operation-detail.dto';
+import { OperationDetailsService } from 'src/operation-details/operation-details.service';
 
 @Injectable()
 export class ProductService {
-    constructor(@InjectRepository(Product) private repo: Repository<Product>) {}
+    constructor(
+        @InjectRepository(Product) private repo: Repository<Product>,
+        private operationDetailService: OperationDetailsService,
+    ) {}
 
     async findAll() {
         const products = await this.repo.find();
@@ -19,13 +21,7 @@ export class ProductService {
             throw new NotFoundException(`There are no products records in the database`);
         }
 
-        const output = products.map((p) => {
-            return plainToInstance(ProductReportDto, p, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
+        return products;
     }
 
     async findOne(id: string) {
@@ -43,6 +39,13 @@ export class ProductService {
 
     async update(id: string, updateProductDto: UpdateProductDto) {
         const product = await this.findOne(id);
+        if (product.category !== updateProductDto.category) {
+            const productExists = await this.operationDetailService.checkDetailsForProductId(id);
+            if (productExists) {
+                updateProductDto.category = product.category;
+            }
+        }
+
         Object.assign(product, updateProductDto);
         return this.repo.save(product);
     }

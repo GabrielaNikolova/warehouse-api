@@ -17,26 +17,16 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const warehouse_entity_1 = require("./entities/warehouse.entity");
 const typeorm_2 = require("typeorm");
-const report_warehouse_dto_1 = require("./dto/report-warehouse.dto");
-const class_transformer_1 = require("class-transformer");
 let WarehouseService = class WarehouseService {
     constructor(repo) {
         this.repo = repo;
     }
     async findAll() {
         const warehouses = await this.repo.find();
-        const output = warehouses.map((w) => {
-            return (0, class_transformer_1.plainToInstance)(report_warehouse_dto_1.WarehouseReportDto, w, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
+        return warehouses;
     }
     async findOne(id) {
         const warehouse = await this.repo.findOneBy({ id });
-        if (!warehouse) {
-            throw new common_1.NotFoundException(`Warehouse with id: ${id} was not found`);
-        }
         return warehouse;
     }
     async create(createWarehouseDto) {
@@ -45,6 +35,17 @@ let WarehouseService = class WarehouseService {
     }
     async update(id, updateWarehouseDto) {
         const warehouse = await this.findOne(id);
+        if (warehouse.type !== updateWarehouseDto.type) {
+            const warehouseExists = await this.repo
+                .createQueryBuilder('w')
+                .leftJoinAndSelect('operation', 'operation')
+                .select('w')
+                .where('operation.warehouse=:wId', { wId: warehouse.id })
+                .getOne();
+            if (warehouseExists) {
+                updateWarehouseDto.type = warehouse.type;
+            }
+        }
         Object.assign(warehouse, updateWarehouseDto);
         return await this.repo.save(warehouse);
     }

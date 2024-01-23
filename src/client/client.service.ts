@@ -4,8 +4,6 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { Client } from './entities/client.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ClientReportDto } from './dto/report-client.dto';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ClientService {
@@ -17,13 +15,7 @@ export class ClientService {
             throw new NotFoundException('There are no clients records in the database');
         }
 
-        const output = clients.map((c) => {
-            return plainToInstance(ClientReportDto, c, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
+        return clients;
     }
 
     async findOne(id: string) {

@@ -9,9 +9,7 @@ export declare class UserService {
     private repo;
     private jwtService;
     constructor(repo: Repository<User>, jwtService: JwtService);
-    findAll(): Promise<UserReportDto[]>;
     find(email: string): Promise<User[]>;
-    findOne(id: string): Promise<UserReportDto>;
     registerUser(username: string, email: string, password: string): Promise<User | UserReportDto>;
     loginUser(user: LoginUserDto): Promise<{
         access_token: string;
