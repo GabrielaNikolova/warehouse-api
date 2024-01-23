@@ -18,8 +18,6 @@ const create_invoice_dto_1 = require("./dto/create-invoice.dto");
 const invoice_entity_1 = require("./entities/invoice.entity");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const report_invoice_dto_1 = require("./dto/report-invoice.dto");
-const class_transformer_1 = require("class-transformer");
 let InvoiceService = class InvoiceService {
     constructor(repo) {
         this.repo = repo;
@@ -29,12 +27,7 @@ let InvoiceService = class InvoiceService {
         if (!invoice) {
             throw new common_1.NotFoundException(`There are no invoice records in the database`);
         }
-        const output = invoice.map((i) => {
-            return (0, class_transformer_1.plainToInstance)(report_invoice_dto_1.InvoiceReportDto, i, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
+        return invoice;
     }
     async findOne(id) {
         const invoice = await this.repo.findOneBy({ id });

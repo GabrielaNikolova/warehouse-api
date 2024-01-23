@@ -11,22 +11,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReportController = void 0;
 const common_1 = require("@nestjs/common");
-const report_service_1 = require("./report.service");
+const operation_details_service_1 = require("../operation-details/operation-details.service");
+const operation_service_1 = require("../operation/operation.service");
 let ReportController = class ReportController {
-    constructor(reportService) {
-        this.reportService = reportService;
+    constructor(operationDetailsService, operationService) {
+        this.operationDetailsService = operationDetailsService;
+        this.operationService = operationService;
     }
     async getBestsellingProducts() {
-        const report = await this.reportService.findBestsellingProducts();
-        return { report };
+        const bestsellingProducts = await this.operationDetailsService.findBestsellingProducts();
+        return bestsellingProducts;
     }
     async getClientsWithMostOrders() {
-        const report = await this.reportService.findBestClient();
-        return { report };
+        const bestClient = await this.operationService.getClientWithMostOrders();
+        return bestClient;
     }
     async getHighestAvailability() {
-        const report = await this.reportService.findHighestAvailability();
-        return { report };
+        const products = await this.operationDetailsService.getProductsWithHighestAvailability();
+        return products;
     }
 };
 exports.ReportController = ReportController;
@@ -50,6 +52,7 @@ __decorate([
 ], ReportController.prototype, "getHighestAvailability", null);
 exports.ReportController = ReportController = __decorate([
     (0, common_1.Controller)('report'),
-    __metadata("design:paramtypes", [report_service_1.ReportService])
+    __metadata("design:paramtypes", [operation_details_service_1.OperationDetailsService,
+        operation_service_1.OperationService])
 ], ReportController);
 //# sourceMappingURL=report.controller.js.map

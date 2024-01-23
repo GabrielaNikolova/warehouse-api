@@ -3,12 +3,13 @@ import { UpdateOperationDetailDto } from './dto/update-operation-detail.dto';
 import { OperationDetail } from './entities/operation-detail.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { OperationDetailReportDto } from './dto/report-operation-detail.dto';
-import { plainToInstance } from 'class-transformer';
 import { OperationDetailDto } from './dto/operation-detail.dto';
 import { CreateOperationDto } from 'src/operation/dto/create-operation.dto';
 import { OperationType } from 'src/enum/operation-type.enum';
 import { WarehouseService } from 'src/warehouse/warehouse.service';
+import { Operation } from 'src/operation/entities/operation.entity';
+import { Product } from 'src/product/entities/product.entity';
+import { Warehouse } from 'src/warehouse/entities/warehouse.entity';
 
 @Injectable()
 export class OperationDetailsService {
@@ -23,13 +24,7 @@ export class OperationDetailsService {
             throw new NotFoundException(`There are no operation details records in the database`);
         }
 
-        const output = operationDetail.map((od) => {
-            return plainToInstance(OperationDetailReportDto, od, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
+        return operationDetail;
     }
 
     async findOne(id: string) {
@@ -77,11 +72,13 @@ export class OperationDetailsService {
         for (const opDetail of existingData) {
             const { sumIn } = await this.repo
                 .createQueryBuilder('in')
-                .leftJoinAndSelect('in.operation', 'operation')
+                .leftJoinAndSelect(Operation, 'operation', 'in.operation = operation.id')
+                .leftJoinAndSelect(Product, 'product', 'in.product = product.id')
+                .leftJoinAndSelect(Warehouse, 'warehouse', 'operation.warehouse = warehouse.id')
                 .select('SUM(in.productQuantity)', 'sumIn')
                 .where('in.product = :productEntity', { productEntity: opDetail.product })
                 .andWhere('operation.type = :type', { type: OperationType.DELIVERY })
-                .andWhere('operation.warehouse.id = :warehouse', { warehouse: warehouse.id })
+                .andWhere('operation.warehouse = :warehouse', { warehouse: warehouse.id })
                 .getRawOne();
 
             if (!sumIn) {
@@ -90,11 +87,13 @@ export class OperationDetailsService {
 
             const { sumOut } = await this.repo
                 .createQueryBuilder('out')
-                .leftJoinAndSelect('out.operation', 'operation')
+                .leftJoinAndSelect(Operation, 'operation', 'out.operation = operation.id')
+                .leftJoinAndSelect(Product, 'product', 'out.product = product.id')
+                .leftJoinAndSelect(Warehouse, 'warehouse', 'operation.warehouse = warehouse.id')
                 .select('SUM(out.productQuantity)', 'sumOut')
                 .where('out.product = :productEntity', { productEntity: opDetail.product })
                 .andWhere('operation.type = :type', { type: OperationType.STOCK_PICKING })
-                .andWhere('operation.warehouse.id = :warehouse', { warehouse: warehouse.id })
+                .andWhere('operation.warehouse = :warehouse', { warehouse: warehouse.id })
                 .getRawOne();
 
             const availableQuantity = sumIn - sumOut;
@@ -119,12 +118,11 @@ export class OperationDetailsService {
     }
 
     async findBestsellingProducts() {
-        const productOrders = await this.repo
+        const productOrders = this.repo
             .createQueryBuilder('report')
-            .leftJoinAndSelect('report.operation', 'operation')
-            .leftJoinAndSelect('report.product', 'product')
+            .leftJoinAndSelect(Operation, 'operation', 'report.operation = operation.id')
+            .leftJoinAndSelect(Product, 'product', 'report.product = product.id')
             .select('product.id', 'id')
-            .addSelect('product.name', 'product')
             .addSelect('SUM(report.productQuantity)', 'quantity')
             .where('operation.type = :operationType', { operationType: OperationType.STOCK_PICKING })
             .groupBy('product.id')
@@ -139,23 +137,21 @@ export class OperationDetailsService {
     }
 
     async getProductsWithHighestAvailability() {
-        const products = this.repo
-            .createQueryBuilder('operation_detail')
-            .leftJoinAndSelect('operation_detail.operation', 'operation')
-            .leftJoinAndSelect('operation_detail.product', 'product')
-            .leftJoinAndSelect('operation.warehouse', 'warehouse')
+        const products = await this.repo
+            .createQueryBuilder('report')
+            .leftJoinAndSelect(Operation, 'operation', 'report.operation = operation.id')
+            .leftJoinAndSelect(Product, 'product', 'report.product = product.id')
+            .leftJoinAndSelect(Warehouse, 'warehouse', 'operation.warehouse = warehouse.id')
             .distinctOn(['warehouse'])
-            .select('product.id', 'id')
-            .addSelect('product.name', 'product')
-            .addSelect('warehouse.name', 'warehouse')
+            .select('product.id', 'product_id')
+            .addSelect('warehouse.id', 'warehouse_id')
             .addSelect([
-                'SUM(CASE WHEN operation.type = :deliveryType THEN operation_detail.product_quantity ELSE 0 END) - ' +
-                    'SUM(CASE WHEN operation.type = :stockPickingType THEN operation_detail.product_quantity ELSE 0 END) as available_quantity',
+                'SUM(CASE WHEN operation.type = :deliveryType THEN report.product_quantity ELSE 0 END) - ' +
+                    'SUM(CASE WHEN operation.type = :stockPickingType THEN report.product_quantity ELSE 0 END) as available_quantity',
             ])
             .setParameter('deliveryType', OperationType.DELIVERY)
             .setParameter('stockPickingType', OperationType.STOCK_PICKING)
-            .groupBy('warehouse')
-            .addGroupBy('product')
+            .groupBy('warehouse.id')
             .addGroupBy('product.id')
             .orderBy('warehouse', 'ASC')
             .getRawMany();

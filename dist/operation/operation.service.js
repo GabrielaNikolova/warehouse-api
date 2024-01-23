@@ -26,6 +26,7 @@ const operation_details_service_1 = require("../operation-details/operation-deta
 const operation_dto_1 = require("./dto/operation.dto");
 const operation_type_enum_1 = require("../enum/operation-type.enum");
 const invoice_service_1 = require("../invoice/invoice.service");
+const client_entity_1 = require("../client/entities/client.entity");
 let OperationService = class OperationService {
     constructor(repo, clientService, warehouseService, productService, operationDetailService, invoiceService) {
         this.repo = repo;
@@ -36,16 +37,11 @@ let OperationService = class OperationService {
         this.invoiceService = invoiceService;
     }
     async findAll() {
-        const operation = await this.repo.find();
-        if (!operation) {
+        const operations = await this.repo.find();
+        if (!operations) {
             throw new common_1.NotFoundException(`There are no operation records in the database`);
         }
-        const output = operation.map((o) => {
-            return (0, class_transformer_1.plainToInstance)(report_operation_dto_1.OperationReportDto, o, {
-                excludeExtraneousValues: true,
-            });
-        });
-        return output;
+        return operations;
     }
     async findOne(id) {
         const operation = await this.repo.findOneBy({ id });
@@ -164,13 +160,11 @@ let OperationService = class OperationService {
     async getClientWithMostOrders() {
         const productOrders = await this.repo
             .createQueryBuilder('report')
-            .leftJoinAndSelect('report.client', 'client')
+            .leftJoinAndSelect(client_entity_1.Client, 'client', 'report.client=client.id')
             .select('client.id', 'id')
-            .addSelect('client.name', 'client')
-            .addSelect('COUNT(report.id)', 'orders')
+            .addSelect('CAST(COUNT(report.id)as INTEGER)', 'orders')
             .where('report.type = :operationType', { operationType: operation_type_enum_1.OperationType.STOCK_PICKING })
             .groupBy('client.id')
-            .addGroupBy('client.name')
             .orderBy('orders', 'DESC')
             .limit(5)
             .getRawMany();

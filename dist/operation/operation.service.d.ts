@@ -17,7 +17,7 @@ export declare class OperationService {
     private operationDetailService;
     private invoiceService;
     constructor(repo: Repository<Operation>, clientService: ClientService, warehouseService: WarehouseService, productService: ProductService, operationDetailService: OperationDetailsService, invoiceService: InvoiceService);
-    findAll(): Promise<OperationReportDto[]>;
+    findAll(): Promise<Operation[]>;
     findOne(id: string): Promise<Operation>;
     create(createOperationDto: CreateOperationDto): Promise<OperationReportDto | OperationReportDto[]>;
     createOperation(createOperationDto: CreateOperationDto): Promise<Operation>;

@@ -1,14 +1,4 @@
-import { Operation } from 'src/operation/entities/operation.entity';
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    JoinColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
-    DeleteDateColumn,
-    OneToOne,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity('invoice')
 export class Invoice {
@@ -21,8 +11,7 @@ export class Invoice {
     @Column('timestamp')
     date: Date;
 
-    @OneToOne(() => Operation, (operation) => operation.id, { nullable: false })
-    @JoinColumn({ name: 'operation_id' })
+    @Column({ name: 'operation_id', nullable: false })
     operation: string;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

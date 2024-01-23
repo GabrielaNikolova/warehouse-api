@@ -1,25 +1,32 @@
 import { Controller, Get } from '@nestjs/common';
-import { ReportService } from './report.service';
+import { OperationDetailsService } from 'src/operation-details/operation-details.service';
+import { OperationService } from 'src/operation/operation.service';
 
 @Controller('report')
 export class ReportController {
-    constructor(private readonly reportService: ReportService) {}
+    constructor(
+        private readonly operationDetailsService: OperationDetailsService,
+        private readonly operationService: OperationService,
+    ) {}
 
     @Get('/bestselling')
     async getBestsellingProducts() {
-        const report = await this.reportService.findBestsellingProducts();
-        return { report };
+        const bestsellingProducts = await this.operationDetailsService.findBestsellingProducts();
+
+        return bestsellingProducts;
     }
 
     @Get('/best-client')
     async getClientsWithMostOrders() {
-        const report = await this.reportService.findBestClient();
-        return { report };
+        const bestClient = await this.operationService.getClientWithMostOrders();
+
+        return bestClient;
     }
 
     @Get('/product-per-warehouse')
     async getHighestAvailability() {
-        const report = await this.reportService.findHighestAvailability();
-        return { report };
+        const products = await this.operationDetailsService.getProductsWithHighestAvailability();
+
+        return products;
     }
 }

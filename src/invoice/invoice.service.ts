@@ -4,9 +4,6 @@ import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { Invoice } from './entities/invoice.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InvoiceReportDto } from './dto/report-invoice.dto';
-import { plainToInstance } from 'class-transformer';
-
 @Injectable()
 export class InvoiceService {
     constructor(@InjectRepository(Invoice) private repo: Repository<Invoice>) {}
@@ -16,14 +13,7 @@ export class InvoiceService {
         if (!invoice) {
             throw new NotFoundException(`There are no invoice records in the database`);
         }
-
-        const output = invoice.map((i) => {
-            return plainToInstance(InvoiceReportDto, i, {
-                excludeExtraneousValues: true,
-            });
-        });
-
-        return output;
+        return invoice;
     }
 
     async findOne(id: string) {

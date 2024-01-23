@@ -1,14 +1,10 @@
-import { ReportService } from './report.service';
+import { OperationDetailsService } from 'src/operation-details/operation-details.service';
+import { OperationService } from 'src/operation/operation.service';
 export declare class ReportController {
-    private readonly reportService;
-    constructor(reportService: ReportService);
-    getBestsellingProducts(): Promise<{
-        report: any[];
-    }>;
-    getClientsWithMostOrders(): Promise<{
-        report: any[];
-    }>;
-    getHighestAvailability(): Promise<{
-        report: any[];
-    }>;
+    private readonly operationDetailsService;
+    private readonly operationService;
+    constructor(operationDetailsService: OperationDetailsService, operationService: OperationService);
+    getBestsellingProducts(): Promise<any[]>;
+    getClientsWithMostOrders(): Promise<any[]>;
+    getHighestAvailability(): Promise<any[]>;
 }

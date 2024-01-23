@@ -1,16 +1,5 @@
-import { Client } from 'src/client/entities/client.entity';
 import { OperationType } from 'src/enum/operation-type.enum';
-import { Warehouse } from 'src/warehouse/entities/warehouse.entity';
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
-    DeleteDateColumn,
-    ManyToOne,
-    JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @Entity('operation')
 export class Operation {
@@ -28,12 +17,10 @@ export class Operation {
     @Column('timestamp')
     date: Date;
 
-    @ManyToOne(() => Client, (client) => client.id, { nullable: false })
-    @JoinColumn({ name: 'client_id' })
+    @Column({ name: 'client_id', nullable: false })
     client: string;
 
-    @ManyToOne(() => Warehouse, (warehouse) => warehouse.id, { nullable: false })
-    @JoinColumn({ name: 'warehouse_id' })
+    @Column({ name: 'warehouse_id', nullable: false })
     warehouse: string;
 
     @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

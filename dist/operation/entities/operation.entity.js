@@ -10,9 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Operation = void 0;
-const client_entity_1 = require("../../client/entities/client.entity");
 const operation_type_enum_1 = require("../../enum/operation-type.enum");
-const warehouse_entity_1 = require("../../warehouse/entities/warehouse.entity");
 const typeorm_1 = require("typeorm");
 let Operation = class Operation {
     constructor() { }
@@ -35,13 +33,11 @@ __decorate([
     __metadata("design:type", Date)
 ], Operation.prototype, "date", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => client_entity_1.Client, (client) => client.id, { nullable: false }),
-    (0, typeorm_1.JoinColumn)({ name: 'client_id' }),
+    (0, typeorm_1.Column)({ name: 'client_id', nullable: false }),
     __metadata("design:type", String)
 ], Operation.prototype, "client", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => warehouse_entity_1.Warehouse, (warehouse) => warehouse.id, { nullable: false }),
-    (0, typeorm_1.JoinColumn)({ name: 'warehouse_id' }),
+    (0, typeorm_1.Column)({ name: 'warehouse_id', nullable: false }),
     __metadata("design:type", String)
 ], Operation.prototype, "warehouse", void 0);
 __decorate([
