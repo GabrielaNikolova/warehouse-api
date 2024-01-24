@@ -16,9 +16,9 @@ export class WarehouseService {
 
     async findOne(id: string) {
         const warehouse = await this.repo.findOneBy({ id });
-        // if (!warehouse) {
-        //     throw new NotFoundException(`Warehouse with id: ${id} was not found`);
-        // }
+        if (!warehouse) {
+            throw new NotFoundException(`Warehouse with id: ${id} was not found`);
+        }
 
         return warehouse;
     }

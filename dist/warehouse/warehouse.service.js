@@ -27,6 +27,9 @@ let WarehouseService = class WarehouseService {
     }
     async findOne(id) {
         const warehouse = await this.repo.findOneBy({ id });
+        if (!warehouse) {
+            throw new common_1.NotFoundException(`Warehouse with id: ${id} was not found`);
+        }
         return warehouse;
     }
     async create(createWarehouseDto) {

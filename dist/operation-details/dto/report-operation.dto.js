@@ -9,41 +9,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OperationDetailReportDto = void 0;
+exports.OperationReportDto = void 0;
 const class_transformer_1 = require("class-transformer");
-class OperationDetailReportDto {
+class OperationReportDto {
 }
-exports.OperationDetailReportDto = OperationDetailReportDto;
+exports.OperationReportDto = OperationReportDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], OperationDetailReportDto.prototype, "id", void 0);
+], OperationReportDto.prototype, "id", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], OperationDetailReportDto.prototype, "productQuantity", void 0);
+], OperationReportDto.prototype, "type", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], OperationDetailReportDto.prototype, "productPrice", void 0);
+], OperationReportDto.prototype, "date", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], OperationDetailReportDto.prototype, "operation", void 0);
+], OperationReportDto.prototype, "client", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], OperationDetailReportDto.prototype, "product", void 0);
+], OperationReportDto.prototype, "warehouse", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Array)
+], OperationReportDto.prototype, "products", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
-], OperationDetailReportDto.prototype, "created", void 0);
+], OperationReportDto.prototype, "created", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
-], OperationDetailReportDto.prototype, "updated", void 0);
+], OperationReportDto.prototype, "updated", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", Date)
-], OperationDetailReportDto.prototype, "deleted", void 0);
-//# sourceMappingURL=report-operation-detail.dto.js.map
+], OperationReportDto.prototype, "deleted", void 0);
+//# sourceMappingURL=report-operation.dto.js.map
