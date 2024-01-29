@@ -24,7 +24,7 @@ exports.UserModule = UserModule = __decorate([
             jwt_1.JwtModule.register({
                 global: true,
                 secret: constants_1.jwtConstants.secret,
-                signOptions: { expiresIn: '15m' },
+                signOptions: { expiresIn: '5m' },
             }),
         ],
         controllers: [user_controller_1.UserController],

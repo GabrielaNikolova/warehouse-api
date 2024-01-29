@@ -12,7 +12,7 @@ import { jwtConstants } from 'src/util/guard/constants';
         JwtModule.register({
             global: true,
             secret: jwtConstants.secret,
-            signOptions: { expiresIn: '15m' },
+            signOptions: { expiresIn: '5m' },
         }),
     ],
     controllers: [UserController],

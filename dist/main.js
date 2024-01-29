@@ -6,6 +6,7 @@ const common_1 = require("@nestjs/common");
 const class_validator_1 = require("class-validator");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.enableCors();
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         transform: true,
