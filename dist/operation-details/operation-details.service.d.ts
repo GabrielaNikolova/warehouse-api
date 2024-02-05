@@ -12,8 +12,8 @@ export declare class OperationDetailsService {
     findOne(id: string): Promise<OperationDetail>;
     create(operationDetailDtos: OperationDetailDto[]): Promise<string[]>;
     update(id: string, updateOperationDetailDto: UpdateOperationDetailDto): Promise<OperationDetail>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<OperationDetail>;
+    permDelete(id: string): Promise<OperationDetail>;
     checkDetailsForProductId(id: string): Promise<boolean>;
     checkAvailableQuantity(createOperatioDto: CreateOperationDto, existingData: OperationDetailDto[]): Promise<void>;
     findDetailsByOperationId(opId: string): Promise<OperationDetail[]>;

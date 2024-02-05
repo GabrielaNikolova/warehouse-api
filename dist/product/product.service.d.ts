@@ -13,7 +13,7 @@ export declare class ProductService {
     findOne(id: string): Promise<Product>;
     create(createProductDto: CreateProductDto): Promise<Product>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<Product>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<Product>;
+    permDelete(id: string): Promise<Product>;
     findProductsByIds(array: CreateOperationDetailDto[], type: string): Promise<OperationDetailDto[]>;
 }

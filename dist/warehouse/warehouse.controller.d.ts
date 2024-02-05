@@ -8,6 +8,6 @@ export declare class WarehouseController {
     findOne(id: string): Promise<import("./entities/warehouse.entity").Warehouse>;
     create(createWarehouseDto: CreateWarehouseDto): Promise<import("./entities/warehouse.entity").Warehouse>;
     update(id: string, updateWarehouseDto: UpdateWarehouseDto): Promise<import("./entities/warehouse.entity").Warehouse>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<import("./entities/warehouse.entity").Warehouse>;
+    permDelete(id: string): Promise<import("./entities/warehouse.entity").Warehouse>;
 }

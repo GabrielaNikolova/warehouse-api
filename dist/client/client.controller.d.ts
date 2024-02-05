@@ -8,6 +8,6 @@ export declare class ClientController {
     findOne(id: string): Promise<import("./entities/client.entity").Client>;
     create(createClientDto: CreateClientDto): Promise<import("./entities/client.entity").Client>;
     update(id: string, updateClientDto: UpdateClientDto): Promise<import("./entities/client.entity").Client>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<import("./entities/client.entity").Client>;
+    permDelete(id: string): Promise<import("./entities/client.entity").Client>;
 }

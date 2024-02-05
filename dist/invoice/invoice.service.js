@@ -54,13 +54,11 @@ let InvoiceService = class InvoiceService {
     }
     async delete(id) {
         const invoice = await this.findOne(id);
-        await this.repo.createQueryBuilder().softDelete().where({ id: invoice.id }).execute();
-        return invoice.id;
+        return await this.repo.softRemove(invoice);
     }
     async permDelete(id) {
         const invoice = await this.findOne(id);
-        this.repo.remove(invoice);
-        return invoice.id;
+        return this.repo.remove(invoice);
     }
 };
 exports.InvoiceService = InvoiceService;

@@ -139,9 +139,7 @@ export class OperationService {
             await this.operationDetailService.delete(detail.id);
         }
 
-        await this.repo.softRemove(operation);
-
-        return operation.id;
+        return await this.repo.softRemove(operation);
     }
 
     async permDelete(id: string) {
@@ -152,9 +150,7 @@ export class OperationService {
             await this.operationDetailService.permDelete(detail.id);
         }
 
-        await this.repo.remove(operation);
-
-        return operation.id;
+        return await this.repo.remove(operation);
     }
 
     async getRequestedData(createOperationDto: CreateOperationDto) {

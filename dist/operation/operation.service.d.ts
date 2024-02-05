@@ -23,8 +23,8 @@ export declare class OperationService {
     createOperation(createOperationDto: CreateOperationDto): Promise<Operation>;
     createOperationWithDetails(createOperationDto: CreateOperationDto, existingData: OperationDetailDto[]): Promise<OperationReportDto>;
     update(id: string, updateOperationDto: UpdateOperationDto): Promise<Operation>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<Operation>;
+    permDelete(id: string): Promise<Operation>;
     getRequestedData(createOperationDto: CreateOperationDto): Promise<OperationDetailDto[]>;
     getClientWithMostOrders(): Promise<any[]>;
 }

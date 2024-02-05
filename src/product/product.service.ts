@@ -52,16 +52,12 @@ export class ProductService {
 
     async delete(id: string) {
         const product = await this.findOne(id);
-        await this.repo.createQueryBuilder().softDelete().where({ id: product.id }).execute();
-
-        return product.id;
+        return await this.repo.softRemove(product);
     }
 
     async permDelete(id: string) {
         const product = await this.findOne(id);
-        this.repo.remove(product);
-
-        return product.id;
+        return this.repo.remove(product);
     }
 
     async findProductsByIds(array: CreateOperationDetailDto[], type: string) {

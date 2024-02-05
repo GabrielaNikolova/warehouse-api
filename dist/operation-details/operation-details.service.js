@@ -57,13 +57,11 @@ let OperationDetailsService = class OperationDetailsService {
     }
     async delete(id) {
         const operationDetail = await this.findOne(id);
-        await this.repo.createQueryBuilder().softDelete().where({ id: operationDetail.id }).execute();
-        return operationDetail.id;
+        return await this.repo.softRemove(operationDetail);
     }
     async permDelete(id) {
         const operationDetail = await this.findOne(id);
-        this.repo.remove(operationDetail);
-        return operationDetail.id;
+        return this.repo.remove(operationDetail);
     }
     async checkDetailsForProductId(id) {
         return await this.repo.existsBy({ product: id });

@@ -47,6 +47,10 @@ export class UserService {
     async loginUser(user: LoginUserDto) {
         const [existingUser] = await this.find(user.email);
 
+        if (!existingUser) {
+            throw new NotFoundException(`Email was not found`);
+        }
+
         const [salt, storedHash] = existingUser.password.split('.');
 
         const hash = (await scrypt(user.password, salt, 32)) as Buffer;
@@ -56,12 +60,13 @@ export class UserService {
         }
 
         const payload = {
-            sub: existingUser.id,
+            id: existingUser.id,
             username: existingUser.username,
             email: existingUser.email,
             role: existingUser.role,
         };
 
+        // const token = { access_token: await this.jwtService.signAsync(payload), user: payload };
         const token = { access_token: await this.jwtService.signAsync(payload) };
 
         return token;

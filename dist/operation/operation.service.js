@@ -122,8 +122,7 @@ let OperationService = class OperationService {
         for (const detail of details) {
             await this.operationDetailService.delete(detail.id);
         }
-        await this.repo.softRemove(operation);
-        return operation.id;
+        return await this.repo.softRemove(operation);
     }
     async permDelete(id) {
         const operation = await this.findOne(id);
@@ -131,8 +130,7 @@ let OperationService = class OperationService {
         for (const detail of details) {
             await this.operationDetailService.permDelete(detail.id);
         }
-        await this.repo.remove(operation);
-        return operation.id;
+        return await this.repo.remove(operation);
     }
     async getRequestedData(createOperationDto) {
         const client = await this.clientService.findOne(createOperationDto.client);

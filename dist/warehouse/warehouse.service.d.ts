@@ -9,6 +9,6 @@ export declare class WarehouseService {
     findOne(id: string): Promise<Warehouse>;
     create(createWarehouseDto: CreateWarehouseDto): Promise<Warehouse>;
     update(id: string, updateWarehouseDto: UpdateWarehouseDto): Promise<Warehouse>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<Warehouse>;
+    permDelete(id: string): Promise<Warehouse>;
 }

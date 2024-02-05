@@ -48,13 +48,16 @@ let UserService = class UserService {
     }
     async loginUser(user) {
         const [existingUser] = await this.find(user.email);
+        if (!existingUser) {
+            throw new common_1.NotFoundException(`Email was not found`);
+        }
         const [salt, storedHash] = existingUser.password.split('.');
         const hash = (await scrypt(user.password, salt, 32));
         if (storedHash !== hash.toString('hex')) {
             throw new common_1.BadRequestException('Wrong password. Please provide a correct password');
         }
         const payload = {
-            sub: existingUser.id,
+            id: existingUser.id,
             username: existingUser.username,
             email: existingUser.email,
             role: existingUser.role,

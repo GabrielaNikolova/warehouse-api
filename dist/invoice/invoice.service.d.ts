@@ -10,6 +10,6 @@ export declare class InvoiceService {
     create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice>;
     createDto(): CreateInvoiceDto;
     update(id: string, updateInvoiceDto: UpdateInvoiceDto): Promise<Invoice>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<Invoice>;
+    permDelete(id: string): Promise<Invoice>;
 }

@@ -8,6 +8,6 @@ export declare class ProductController {
     findOne(id: string): Promise<import("./entities/product.entity").Product>;
     create(createProductDto: CreateProductDto): Promise<import("./entities/product.entity").Product>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<import("./entities/product.entity").Product>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<import("./entities/product.entity").Product>;
+    permDelete(id: string): Promise<import("./entities/product.entity").Product>;
 }

@@ -46,13 +46,11 @@ let ClientService = class ClientService {
     }
     async delete(id) {
         const client = await this.findOne(id);
-        await this.repo.createQueryBuilder().softDelete().where({ id: client.id }).execute();
-        return client.id;
+        return await this.repo.softRemove(client);
     }
     async permDelete(id) {
         const client = await this.findOne(id);
-        this.repo.remove(client);
-        return client.id;
+        return this.repo.remove(client);
     }
 };
 exports.ClientService = ClientService;

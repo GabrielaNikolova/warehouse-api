@@ -48,15 +48,11 @@ export class WarehouseService {
 
     async delete(id: string) {
         const warehouse = await this.findOne(id);
-        await this.repo.createQueryBuilder().softDelete().where({ id: warehouse.id }).execute();
-
-        return warehouse.id;
+        return this.repo.softRemove(warehouse);
     }
 
     async permDelete(id: string) {
         const warehouse = await this.findOne(id);
-        this.repo.remove(warehouse);
-
-        return warehouse.id;
+        return this.repo.remove(warehouse);
     }
 }

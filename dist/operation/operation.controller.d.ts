@@ -8,6 +8,6 @@ export declare class OperationController {
     findOne(id: string): Promise<import("./entities/operation.entity").Operation>;
     create(createOperationDto: CreateOperationDto): Promise<import("./dto/report-operation.dto").OperationReportDto | import("./dto/report-operation.dto").OperationReportDto[]>;
     update(id: string, updateOperationDto: UpdateOperationDto): Promise<import("./entities/operation.entity").Operation>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<import("./entities/operation.entity").Operation>;
+    permDelete(id: string): Promise<import("./entities/operation.entity").Operation>;
 }

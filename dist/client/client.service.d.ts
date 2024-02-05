@@ -9,6 +9,6 @@ export declare class ClientService {
     findOne(id: string): Promise<Client>;
     create(createClientDto: CreateClientDto): Promise<Client>;
     update(id: string, updateClientDto: UpdateClientDto): Promise<Client>;
-    delete(id: string): Promise<string>;
-    permDelete(id: string): Promise<string>;
+    delete(id: string): Promise<Client>;
+    permDelete(id: string): Promise<Client>;
 }
