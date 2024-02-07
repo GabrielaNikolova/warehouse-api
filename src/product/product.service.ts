@@ -3,10 +3,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateOperationDetailDto } from 'src/operation-details/dto/create-operation-detail.dto';
 import { OperationDetailDto } from 'src/operation-details/dto/operation-detail.dto';
 import { OperationDetailsService } from 'src/operation-details/operation-details.service';
+import { ProductWarehouseCategory } from 'src/enum/product-warehouse-category.enum';
 
 @Injectable()
 export class ProductService {
@@ -30,6 +31,17 @@ export class ProductService {
             throw new NotFoundException(`Product with id: ${id} was not found`);
         }
         return product;
+    }
+
+    async findAllByCategory(cat: ProductWarehouseCategory) {
+        console.log('gategory', cat);
+
+        const products = await this.repo.find({ where: { category: cat } });
+        if (!products) {
+            throw new NotFoundException(`There are no products with category ${cat}`);
+        }
+
+        return products;
     }
 
     async create(createProductDto: CreateProductDto) {

@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseUUIDPipe, Query } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { HasRoles } from 'src/util/decorator/has-roles.decorator';
 import { UserRole } from 'src/enum/user-role.enum';
 import { RolesGuard } from 'src/util/guard/role.guard';
+import { ProductWarehouseCategory } from 'src/enum/product-warehouse-category.enum';
 
 @UseGuards(RolesGuard)
 @Controller('product')
@@ -16,10 +17,19 @@ export class ProductController {
         return await this.productService.findAll();
     }
 
+    @HasRoles(UserRole.OWNER, UserRole.OPERATOR)
+    @Get('/search')
+    async findByCategory(@Query('category') category?: ProductWarehouseCategory) {
+        console.log('CAT', category);
+
+        return await this.productService.findAllByCategory(category);
+    }
+
     @Get(':id')
     async findOne(@Param('id', new ParseUUIDPipe()) id: string) {
         return await this.productService.findOne(id);
     }
+
     @HasRoles(UserRole.OWNER, UserRole.OPERATOR)
     @Post('/create')
     async create(@Body() createProductDto: CreateProductDto) {

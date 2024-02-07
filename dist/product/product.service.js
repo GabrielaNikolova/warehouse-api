@@ -38,6 +38,14 @@ let ProductService = class ProductService {
         }
         return product;
     }
+    async findAllByCategory(cat) {
+        console.log('gategory', cat);
+        const products = await this.repo.find({ where: { category: cat } });
+        if (!products) {
+            throw new common_1.NotFoundException(`There are no products with category ${cat}`);
+        }
+        return products;
+    }
     async create(createProductDto) {
         const product = this.repo.create(createProductDto);
         return await this.repo.save(product);

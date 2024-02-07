@@ -20,12 +20,17 @@ const update_product_dto_1 = require("./dto/update-product.dto");
 const has_roles_decorator_1 = require("../util/decorator/has-roles.decorator");
 const user_role_enum_1 = require("../enum/user-role.enum");
 const role_guard_1 = require("../util/guard/role.guard");
+const product_warehouse_category_enum_1 = require("../enum/product-warehouse-category.enum");
 let ProductController = class ProductController {
     constructor(productService) {
         this.productService = productService;
     }
     async findAll() {
         return await this.productService.findAll();
+    }
+    async findByCategory(category) {
+        console.log('CAT', category);
+        return await this.productService.findAllByCategory(category);
     }
     async findOne(id) {
         return await this.productService.findOne(id);
@@ -50,6 +55,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProductController.prototype, "findAll", null);
+__decorate([
+    (0, has_roles_decorator_1.HasRoles)(user_role_enum_1.UserRole.OWNER, user_role_enum_1.UserRole.OPERATOR),
+    (0, common_1.Get)('/search'),
+    __param(0, (0, common_1.Query)('category')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductController.prototype, "findByCategory", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),

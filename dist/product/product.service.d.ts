@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { CreateOperationDetailDto } from 'src/operation-details/dto/create-operation-detail.dto';
 import { OperationDetailDto } from 'src/operation-details/dto/operation-detail.dto';
 import { OperationDetailsService } from 'src/operation-details/operation-details.service';
+import { ProductWarehouseCategory } from 'src/enum/product-warehouse-category.enum';
 export declare class ProductService {
     private repo;
     private operationDetailService;
     constructor(repo: Repository<Product>, operationDetailService: OperationDetailsService);
     findAll(): Promise<Product[]>;
     findOne(id: string): Promise<Product>;
+    findAllByCategory(cat: ProductWarehouseCategory): Promise<Product[]>;
     create(createProductDto: CreateProductDto): Promise<Product>;
     update(id: string, updateProductDto: UpdateProductDto): Promise<Product>;
     delete(id: string): Promise<Product>;
