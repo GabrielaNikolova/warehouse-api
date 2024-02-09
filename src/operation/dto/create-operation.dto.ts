@@ -23,7 +23,7 @@ export class CreateOperationDto {
 
     //if type is transfer - the warehouse to which we deliver the products should be specified
     @IsOptional()
-    @IsUUID()
+    //@IsUUID()
     warehouseIn: string;
 
     @IsNotEmpty()

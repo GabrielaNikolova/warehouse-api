@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, ParseUUIDPipe, UseGuards, Query } from '@nestjs/common';
 import { OperationDetailsService } from './operation-details.service';
 import { UpdateOperationDetailDto } from './dto/update-operation-detail.dto';
 import { UserRole } from 'src/enum/user-role.enum';
@@ -13,6 +13,14 @@ export class OperationDetailsController {
     @Get()
     async findAll() {
         return await this.operationDetailsService.findAll();
+    }
+
+    @HasRoles(UserRole.OWNER, UserRole.OPERATOR)
+    @Get('/search')
+    async findByOperation(@Query('opId') opId: string) {
+        console.log('opId', opId);
+
+        return await this.operationDetailsService.findAllByOperationId(opId);
     }
 
     @Get(':id')

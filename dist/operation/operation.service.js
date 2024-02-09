@@ -64,10 +64,14 @@ let OperationService = class OperationService {
             createOperationDto.isTransfer = true;
             createOperationDto.type = operation_type_enum_1.OperationType.STOCK_PICKING;
             await this.operationDetailService.checkAvailableQuantity(createOperationDto, existingData);
+            console.log('DTO', createOperationDto, existingData);
             const firstOperation = await this.createOperationWithDetails(createOperationDto, existingData);
-            createOperationDto.type = operation_type_enum_1.OperationType.DELIVERY;
-            const secondOperation = await this.createOperationWithDetails(createOperationDto, existingData);
-            output = [firstOperation, secondOperation];
+            if (firstOperation) {
+                createOperationDto.type = operation_type_enum_1.OperationType.DELIVERY;
+                const data = await this.getRequestedData(createOperationDto);
+                const secondOperation = await this.createOperationWithDetails(createOperationDto, data);
+                output = [firstOperation, secondOperation];
+            }
             return output;
         }
     }
@@ -92,14 +96,15 @@ let OperationService = class OperationService {
         const operation = await this.repo.save(operationDto);
         return operation;
     }
-    async createOperationWithDetails(createOperationDto, existingData) {
+    async createOperationWithDetails(createOperationDto, data) {
         const operation = await this.createOperation(createOperationDto);
         if (operation.type === 'stock picking') {
             const invoiceDto = this.invoiceService.createDto();
             invoiceDto.operation = operation.id;
             await this.invoiceService.create(invoiceDto);
         }
-        const operationDetails = existingData.map((operationDetail) => {
+        console.log('EXISTINGDATA', data);
+        const operationDetails = data.map((operationDetail) => {
             operationDetail.operation = operation.id;
             return operationDetail;
         });
@@ -134,6 +139,7 @@ let OperationService = class OperationService {
     }
     async getRequestedData(createOperationDto) {
         const client = await this.clientService.findOne(createOperationDto.client);
+        console.log('warehousein', createOperationDto.warehouseIn);
         if (createOperationDto.type === 'transfer' && createOperationDto.warehouseIn) {
             const warehouseIn = await this.warehouseService.findOne(createOperationDto.warehouseIn);
             if (!warehouseIn) {

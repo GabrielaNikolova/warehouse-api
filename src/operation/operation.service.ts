@@ -60,12 +60,18 @@ export class OperationService {
 
             await this.operationDetailService.checkAvailableQuantity(createOperationDto, existingData);
 
+            console.log('DTO', createOperationDto, existingData);
+
             const firstOperation = await this.createOperationWithDetails(createOperationDto, existingData);
+            if (firstOperation) {
+                createOperationDto.type = OperationType.DELIVERY;
+                const data = await this.getRequestedData(createOperationDto);
 
-            createOperationDto.type = OperationType.DELIVERY;
-            const secondOperation = await this.createOperationWithDetails(createOperationDto, existingData);
 
-            output = [firstOperation, secondOperation];
+                const secondOperation = await this.createOperationWithDetails(createOperationDto, data);
+
+                output = [firstOperation, secondOperation];
+            }
 
             return output;
         }
@@ -98,7 +104,7 @@ export class OperationService {
         return operation;
     }
 
-    async createOperationWithDetails(createOperationDto: CreateOperationDto, existingData: OperationDetailDto[]) {
+    async createOperationWithDetails(createOperationDto: CreateOperationDto, data: OperationDetailDto[]) {
         const operation = await this.createOperation(createOperationDto);
 
         if (operation.type === 'stock picking') {
@@ -107,7 +113,9 @@ export class OperationService {
             await this.invoiceService.create(invoiceDto);
         }
 
-        const operationDetails = existingData.map((operationDetail) => {
+        console.log('EXISTINGDATA', data);
+
+        const operationDetails = data.map((operationDetail) => {
             operationDetail.operation = operation.id;
             return operationDetail;
         });
@@ -117,8 +125,8 @@ export class OperationService {
         const output = plainToInstance(OperationReportDto, operation, {
             excludeExtraneousValues: true,
         });
+        
         output.products = details;
-
         return output;
     }
 
@@ -155,6 +163,7 @@ export class OperationService {
 
     async getRequestedData(createOperationDto: CreateOperationDto) {
         const client = await this.clientService.findOne(createOperationDto.client);
+        console.log('warehousein', createOperationDto.warehouseIn);
 
         if (createOperationDto.type === 'transfer' && createOperationDto.warehouseIn) {
             const warehouseIn = await this.warehouseService.findOne(createOperationDto.warehouseIn);
@@ -166,6 +175,9 @@ export class OperationService {
         } else if (createOperationDto.type === 'transfer' && !createOperationDto.warehouseIn) {
             throw new BadRequestException('Please provide information about the delivery warehouse');
         }
+        // else if (createOperationDto.type !== 'transfer' && createOperationDto.warehouseIn) {
+        //     createOperationDto.warehouseIn = null;
+        // }
 
         const warehouse = await this.warehouseService.findOne(createOperationDto.warehouse);
 

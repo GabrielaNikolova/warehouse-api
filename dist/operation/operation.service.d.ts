@@ -21,7 +21,7 @@ export declare class OperationService {
     findOne(id: string): Promise<Operation>;
     create(createOperationDto: CreateOperationDto): Promise<OperationReportDto | OperationReportDto[]>;
     createOperation(createOperationDto: CreateOperationDto): Promise<Operation>;
-    createOperationWithDetails(createOperationDto: CreateOperationDto, existingData: OperationDetailDto[]): Promise<OperationReportDto>;
+    createOperationWithDetails(createOperationDto: CreateOperationDto, data: OperationDetailDto[]): Promise<OperationReportDto>;
     update(id: string, updateOperationDto: UpdateOperationDto): Promise<Operation>;
     delete(id: string): Promise<Operation>;
     permDelete(id: string): Promise<Operation>;

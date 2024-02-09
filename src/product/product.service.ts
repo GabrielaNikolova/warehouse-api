@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateOperationDetailDto } from 'src/operation-details/dto/create-operation-detail.dto';
 import { OperationDetailDto } from 'src/operation-details/dto/operation-detail.dto';
 import { OperationDetailsService } from 'src/operation-details/operation-details.service';

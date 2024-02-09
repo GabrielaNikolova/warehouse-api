@@ -10,6 +10,7 @@ export declare class OperationDetailsService {
     constructor(repo: Repository<OperationDetail>, warehouseService: WarehouseService);
     findAll(): Promise<OperationDetail[]>;
     findOne(id: string): Promise<OperationDetail>;
+    findAllByOperationId(id: string): Promise<OperationDetail[]>;
     create(operationDetailDtos: OperationDetailDto[]): Promise<string[]>;
     update(id: string, updateOperationDetailDto: UpdateOperationDetailDto): Promise<OperationDetail>;
     delete(id: string): Promise<OperationDetail>;

@@ -41,6 +41,13 @@ let OperationDetailsService = class OperationDetailsService {
         }
         return operationDetail;
     }
+    async findAllByOperationId(id) {
+        const details = await this.repo.find({ where: { operation: id } });
+        if (!details) {
+            throw new common_1.NotFoundException(`There are no details for operation with number: ${id}`);
+        }
+        return details;
+    }
     async create(operationDetailDtos) {
         const detailsCreated = [];
         for (const dto of operationDetailDtos) {
