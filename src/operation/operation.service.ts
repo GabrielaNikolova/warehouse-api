@@ -67,7 +67,6 @@ export class OperationService {
                 createOperationDto.type = OperationType.DELIVERY;
                 const data = await this.getRequestedData(createOperationDto);
 
-
                 const secondOperation = await this.createOperationWithDetails(createOperationDto, data);
 
                 output = [firstOperation, secondOperation];
@@ -125,7 +124,7 @@ export class OperationService {
         const output = plainToInstance(OperationReportDto, operation, {
             excludeExtraneousValues: true,
         });
-        
+
         output.products = details;
         return output;
     }

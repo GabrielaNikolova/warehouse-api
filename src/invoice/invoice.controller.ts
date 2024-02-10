@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards, Query } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { UserRole } from 'src/enum/user-role.enum';
@@ -13,6 +13,14 @@ export class InvoiceController {
     @Get()
     async findAll() {
         return await this.invoiceService.findAll();
+    }
+
+    @HasRoles(UserRole.OWNER, UserRole.OPERATOR)
+    @Get('/search')
+    async findByOperation(@Query('opId') opId: string) {
+        console.log('opId', opId);
+
+        return await this.invoiceService.findByOperationId(opId);
     }
 
     @Get(':id')

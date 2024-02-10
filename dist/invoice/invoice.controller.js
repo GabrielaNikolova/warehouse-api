@@ -26,6 +26,10 @@ let InvoiceController = class InvoiceController {
     async findAll() {
         return await this.invoiceService.findAll();
     }
+    async findByOperation(opId) {
+        console.log('opId', opId);
+        return await this.invoiceService.findByOperationId(opId);
+    }
     async findOne(id) {
         return await this.invoiceService.findOne(id);
     }
@@ -46,6 +50,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], InvoiceController.prototype, "findAll", null);
+__decorate([
+    (0, has_roles_decorator_1.HasRoles)(user_role_enum_1.UserRole.OWNER, user_role_enum_1.UserRole.OPERATOR),
+    (0, common_1.Get)('/search'),
+    __param(0, (0, common_1.Query)('opId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], InvoiceController.prototype, "findByOperation", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe())),

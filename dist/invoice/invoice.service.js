@@ -36,6 +36,13 @@ let InvoiceService = class InvoiceService {
         }
         return invoice;
     }
+    async findByOperationId(id) {
+        const invoice = await this.repo.find({ where: { operation: id } });
+        if (!invoice) {
+            throw new common_1.NotFoundException(`There are no invoice for operation with number: ${id}`);
+        }
+        return invoice;
+    }
     async create(createInvoiceDto) {
         const invoice = this.repo.create(createInvoiceDto);
         return await this.repo.save(invoice);
