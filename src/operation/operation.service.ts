@@ -134,6 +134,16 @@ export class OperationService {
 
         await this.clientService.findOne(updateOperationDto.client);
 
+        const details = await this.operationDetailService.findAllByOperationId(id);
+
+        details.map(async (d) => {
+            for (const product of updateOperationDto.products) {
+                if (d.product === product.product) {
+                    await this.operationDetailService.update(d.id, product);
+                }
+            }
+        });
+
         Object.assign(operation, updateOperationDto);
         return await this.repo.save(operation);
     }

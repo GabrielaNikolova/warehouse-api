@@ -7,7 +7,7 @@ export declare class InvoiceService {
     constructor(repo: Repository<Invoice>);
     findAll(): Promise<Invoice[]>;
     findOne(id: string): Promise<Invoice>;
-    findByOperationId(id: string): Promise<Invoice[]>;
+    findByOperationId(id: string): Promise<Invoice>;
     create(createInvoiceDto: CreateInvoiceDto): Promise<Invoice>;
     createDto(): CreateInvoiceDto;
     update(id: string, updateInvoiceDto: UpdateInvoiceDto): Promise<Invoice>;
